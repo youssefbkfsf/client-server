@@ -3,4 +3,4 @@ import UserSlices from './slices/UserSlices'
 
 
 
-export default configureStore({reducer:{user:{UserSlices}}})
+export default configureStore({reducer:{user:UserSlices}})

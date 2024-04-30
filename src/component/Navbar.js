@@ -1,20 +1,27 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { logout } from "../redux/slices/UserSlices";
 const Navbar = () => {
-  const {isAuth}=useSelector(state=>state.user)
+  const { isAuth } = useSelector((state) => state.user);
+  const dispatch=useDispatch()
   return (
-    
     <div>
-    <Link to="/profile">Profile</Link>
-<Link to="/login">Login</Link>
-<Link to="/profile">Profile</Link>
-    <div>
-      navbar
+      {isAuth ? (
+        <>
+          <Link to="/profile">Profile</Link>
+          <button onClick={()=>{
+            dispatch(logout())
+          }}>Logout</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login">Login</Link>
+          <Link to="/register">Register</Link>
+        </>
+      )}
     </div>
-    <button>logout</button> 
-    </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
