@@ -1,59 +1,85 @@
-import{createSlice,createAsyncThunk, isRejectedWithValue} from "@reduxjs/toolkit"
+import {createSlice,createAsyncThunk} from "@reduxjs/toolkit"
 import axios from 'axios'
 
-export const useRegister=createAsyncThunk('/register',async(data,{})=>{
-  try {
-    const res=await axios.post("http://localhost:8081/api/login",data)
-    return res.data
-  } catch (error) {
-    return rejectWithValue(error.message.data.msg)
-  }  
-}
-.addCase
+export const UserLogin=createAsyncThunk('/login',async(data,{rejectWithValue})=>{
+    try {
+        const res=await axios.post("https://backend-f3.onrender.com/api/login",data)
+        return res.data
+    } catch (error) {
+        return rejectWithValue(error.response.data.msg)
+    }
+})
+
+export const UserRegister=createAsyncThunk('/register',async(data,{rejectWithValue})=>{
+    try {
+        const res=await axios.post("https://backend-f3.onrender.com/api/register",data)
+        return res.data
+    } catch (error) {
+        return rejectWithValue(error.response.data.msg)
+    }
+})
 
 
 
-
-
-
-)
-
-
-
-
-
-
-const UserSlice=createSlice({
+const userSlice=createSlice({
     name:"users",
-    initstate:{
+    initialState:{
         userData:{},
-        token: localStorage.getItem('token')||null,
+        token:localStorage.getItem('token')||null,
         loading:false,
         error:null,
-        isAuth:localStorage.getItem('isAuth')||null,
-
+        isAuth:localStorage.getItem('isAuth')||false
     },
-extraReducers:(builder)
-.builder.addCase(UserLogin.pending,(state)=>{
-state.loading=true
-state.isloading.false
-state.error=action,payload
-localStorage.setItem("token",action.payload.token)
-localStorage.setItem("isAuth",true)
-)
+reducers:{
+    logout:(state)=>{
+        state.token=null
+        state.isAuth=false
+        localStorage.removeItem("isAuth")
+        localStorage.removeItem("token")
+
+    }
+},
+    extraReducers:(builder)=>{
+        builder.addCase(UserLogin.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(UserLogin.fulfilled,(state,action)=>{
+            state.loading=false
+            state.error=null
+            state.token=action.payload.token
+            state.isAuth=true
+            localStorage.setItem("token",action.payload.token)
+            localStorage.setItem("isAuth",true)
+        })
+        .addCase(UserLogin.rejected,(state,action)=>{
+            state.loading=false
+            state.error=action.payload
+            state.token=null
+            state.isAuth=false
+        })
+
+        .addCase(UserRegister.pending,(state)=>{
+            state.loading=true
+        })
+        .addCase(UserRegister.fulfilled,(state,action)=>{
+            state.loading=false
+            state.error=null
+            state.token=action.payload.token
+            state.isAuth=true
+            localStorage.setItem("token",action.payload.token)
+            localStorage.setItem("isAuth",true)
+        })
+        .addCase(UserRegister.rejected,(state,action)=>{
+            state.loading=false
+            state.error=action.payload
+            state.token=null
+            state.isAuth=false
+        })
+       
+    }
 })
-.addCase(UserLogin.fulfilled,(state,action)=>{
-  
-
-
-  addCase(userRegister.pending,(state)=>{
-    state.loading=true
-    state.isloading.false
-    state.error=action,payload
-    localStorage.setItem("token",action.payload.token)
-    localStorage.setItem("isAuth",true)
-})
 
 
 
-export default UserSlice.reducer 
+export default userSlice.reducer
+export const {logout}=userSlice.actions

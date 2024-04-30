@@ -1,8 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 const Navbar = () => {
+  const {isAuth}=useSelector(state=>state.user)
   return (
-    const {isAuth}=useSelector(state=>state.user)
+    
     <div>
     <Link to="/profile">Profile</Link>
 <Link to="/login">Login</Link>

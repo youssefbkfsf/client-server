@@ -2,7 +2,7 @@ import React from 'react'
 import {Route,Routes} from 'react-router-dom'
 import Login from './component/Login'
 import Register from './component/Register'
-import Navbar from './component/navbar'
+import Navbar from './component/Navbar'
 const App = () => {
   return (
     <div>
